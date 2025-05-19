@@ -1,0 +1,20 @@
+{
+  "name": "puppeteer-pdf",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@azure/storage-blob": "^12.27.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "path": "^0.12.7",
+    "pdf-lib": "^1.17.1",
+    "puppeteer": "^22.8.2"
+  },
+  "scripts": {
+    "install-deps": "npm install",
+    "start": "npm index.js",
+    "dev": "nodemon index.js",
+    "build": "npm run install-deps && npm start"
+  }
+}
