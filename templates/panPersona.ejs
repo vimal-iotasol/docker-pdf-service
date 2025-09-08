@@ -1,0 +1,759 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif !important;
+            margin: 0;
+            padding: 0;
+        }
+        .chart-container {
+            width: 450px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <%
+        function renderWithBoldJoin(arr) {
+            return arr.map((item, index) => {
+                const isLast = index === arr.length - 1;
+                const isSecondLast = index === arr.length - 2;
+
+                const boldItem = `<strong>${item}</strong>`;
+                const separator = !isLast ? (isSecondLast ? ' or ' : ', ') : '';
+
+                return boldItem + separator;
+            }).join('');
+        }
+
+        function boldFirstWordFromFirstItem(input) {
+            if (!Array.isArray(input) || input.length === 0) return '';
+
+            const firstItem = input[0];
+            if (typeof firstItem !== 'string') return '';
+
+            const firstWord = firstItem.trim().split(' ')[0];
+            return `<strong>${firstWord}</strong>`;
+        }
+
+        function getAttributeMessage(title, index, total, highRank) {
+            const strongTitle = `<strong>${title}</strong>`;
+            const highRankFormatted = boldFirstWordFromFirstItem(highRank);
+
+            if (index === 0) {
+            return (
+                'You have already demonstrated strength as a ' + highRankFormatted + '. ' +
+                'But even within the skillset of a ' + highRankFormatted + ', there is opportunity for improvement. ' +
+                'In your case, you have the potential to become even more effective by focusing on the attribute known as ' + strongTitle + '. ' +
+                'Let’s investigate this further.'
+            );
+            }
+
+            if (index === total - 1) {
+            return (
+                'A final way to improve your performance is to look at the way you approach the attribute known as ' + strongTitle + '.'
+            );
+            }
+
+            return (
+            'Another way to improve your performance and become even more effective is to work on the attribute known as ' + strongTitle + '.'
+            );
+        }
+
+        function styledConclusion(conclusion) {
+            const styledConclusion = conclusion
+            .replace(/<p>/g, '<p style="color: #ffffff;">')
+            .replace(/<ul>/g, '<ul style="padding-inline-start: 40px">');
+                return styledConclusion;
+            }
+    %>
+    <div>
+        <div id="mainPage" class="report-wrapper"
+            style="max-width: 800px; width: 100%; margin: 0px auto; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);">
+            <div style="break-after: page; break-inside: avoid;">
+                <div class="report-header" style="padding: 2vw 3vw;">
+                    <div class="main-page-header"
+                        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div class="main-page-logo" style="max-width: 188px; width: 30%;"><img src="logoDataUri" alt="Logo" style="width: 100%;"></div>
+                        <div class="main-page-website" style="font-size: clamp(12px, 2vw, 16px);">www.panalitix.com
+                        </div>
+                    </div>
+                </div>
+                <div class="main-page-bg-image" style="width: 100%;"><img src="reportBgUri" alt="Report background"
+                        style="width: 100%;"></div>
+                <div class="main-page-content" style="padding: 2vw 3vw; break-before: avoid;">
+                    <div class="main-page-content-heading">
+                        <p style="font-size: clamp(24px, 6vw, 60px); line-height: 1.05; font-weight: 700;">
+                            PanPersona
+                            <br>Report
+                        </p>
+                        <div class="vertical-line"
+                            style="width: 100%; max-width: 335px; height: 3px; background-color: black; margin-top: 16px;">
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <div class="content-title" style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 600;">
+                            Thank you for viewing this report!
+                            <br><br>PanPersona gives individuals the best chance of building rewarding careers in
+                            organizations that thrive.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="userDetailPage" class="report-wrapper" style="max-width: 794px; width: 100%; margin: 0px auto; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);">
+            <div style="break-inside: avoid; break-before: page;">
+                <div class="user-details-section" style="padding: 2vw 3vw;">
+                    <div class="user-detail">
+                        <div class="user-name" style="font-size: clamp(20px, 3vw, 24px); line-height: 1.25; font-weight: 600;">
+                            <%= userDetails.Name %>
+                        </div>
+                        <div class="user-info-grid" style="margin-top: 16px;">
+                            <div class="user-employer" style="font-size: clamp(14px, 2vw, 18px); line-height: 1.2; margin-bottom: 8px;">
+                                <span style="font-weight: 600;">Employer</span> : <%= userDetails.Employer %>
+                            </div>
+                            <% if (userDetails.JobTitle) { %>
+                                <div class="user-job"
+                                    style="font-size: clamp(14px, 2vw, 18px); line-height: 1.2; margin-bottom: 8px;">
+                                    <span style="font-weight: 600;"> Current Job Title</span> : <%= userDetails.JobTitle %>
+                                </div>
+                            <% } %>
+                            <% if (userDetails.Age) { %>
+                                <div class="user-job" style="font-size: clamp(14px, 2vw, 18px); line-height: 1.2; margin-bottom: 8px;">
+                                    <span style="font-weight: 600;">Age</span> : <%= userDetails.Age %>
+                                </div>
+                            <% } %>
+                            <% if (userDetails.Location) { %>
+                                <div class="user-job" style="font-size: clamp(14px, 2vw, 18px); line-height: 1.2; margin-bottom: 8px;">
+                                    <span style="font-weight: 600;">Current Job Title</span> : <%= userDetails.Location %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="introduction-wrapper" style="padding: 2vw 3vw; background-color: rgb(238, 248, 252);">
+                    <div class="improvement-wrapper-icon"><img src="progress1Uri" alt="Strengths Icon" style="max-width: 100%;"></div>
+                    <div class="introduction-heading" style="font-size: clamp(20px, 3vw, 24px); line-height: 1.25; font-weight: 600; margin-bottom: 16px;">
+                        Part A: Introduction
+                    </div>
+                    <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 300; line-height: 1.5;">
+                        Thank you for taking the PanPersona test. This report can help you unlock opportunities in your professional life, work effectively in teams and contribute to a robust and effective organization.
+                    </p>
+                    <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 300; line-height: 1.5; margin-top: 16px;">
+                        For more on the definitions and behavioural framework underpinning this test, please see the Appendix at the end of this report.
+                    </p>
+                </div>
+            </div>
+            <div class="profile-overview" style="padding: 2vw 3vw;">
+                <div class="profile-overview-icon"><img src="progress2Uri" alt="Profile icon" style="max-width: 100%;"></div>
+                <div class="profile-overview-heading" style="font-size: clamp(20px, 3vw, 24px); line-height: 1.25; font-weight: 600; margin-top: 10px;">
+                    Part B: Profile Overview
+                </div>
+                <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 300; line-height: 1.5; margin-top: 20px;">
+                    <span style="font-weight: 600;">Congratulations!</span> 
+                    Your behaviors are most closely associated with the profile known as 
+                    <span style="font-weight: 600;"><%= rankResult.highRank.join(' or ') %></span>.</p>
+                    <% rankResult.highRank2.forEach(function(rank) { 
+                        const key = rank.split(' ')[0]; 
+                    %>
+                        <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 300; line-height: 1.5; margin-top: 20px;">
+                            Typically, a <span style="font-weight: 600;"><%= rank %></span>
+                            <%= PERSONALITY_TYPE_INFO[key] %>
+                        </p>
+                    <% }); %>
+                    <div style="margin-top: 20px;">
+                        <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 400; line-height: 1.4; margin-bottom: 20px;">
+                            You are <span style="font-weight: 600;">less associated</span> with the profiles known as:
+                        </p>
+                        <ul style="list-style-type: disc; padding-left: 40px; font-size: clamp(14px, 1.8vw, 16px);">
+                            <% rankResult.lowRank.forEach(function(item, i) { %>
+                                <li style="font-weight: 600; margin-bottom: 10px;">
+                                    <%= item %>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                    <div class="barChart" style="width: 100%; overflow-x: auto; margin: 20px 0px;">
+                        <canvas id="associationBarChart" width="600" height="300"></canvas>
+                    </div>     
+
+                    <div style="margin-top: 20px; line-height: 1.5; font-size: clamp(14px, 1.8vw, 16px);">
+                        What does this mean?
+                        <br><br>
+                        You are most likely to succeed and enjoy professional roles which emphasize the skills of a 
+                        <span style="font-weight: 600;"><%- renderWithBoldJoin(rankResult.highRank2) %></span> 
+                        (versus those which emphasize the skills of a <span style="font-weight: 600;"><%- renderWithBoldJoin(rankResult.lowRank2) %></span>.
+                        <br><br>
+                        But even in your core area of strength as a <span style="font-weight: 600;"><%- renderWithBoldJoin(rankResult.highRank2) %></span>, there will be ways you can
+                        improve. This report will help you to understand these opportunities to develop and hone skills in your area of strength.
+                        <br><br>Section D below, delves deeper into this.
+                    </div>
+            </div>
+        </div>
+
+        <div id="strengthPage" class="report-wrapper" style="max-width: 794px; width: 100%; margin: 0px auto; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);">
+            <div class="improvement-wrapper" style="padding: 2vw 3vw; break-before: avoid; margin-top: 20px;">
+                <div class="improvement-wrapper-icon"><img src="progress3Uri" alt="Strengths Icon" style="max-width: 100%;"></div>
+                <div class="improvement-wrapper-heading" style="font-size: clamp(20px, 3vw, 24px); line-height: 1.25; font-weight: 600; margin-top: 10px;">
+                    Part C: Strengths Analysis
+                </div>
+                <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 300; line-height: 1.5; margin-top: 20px;">
+                    Each profile demonstrates strengths in specific areas (known as attributes). Below is a breakdown of how your profile aligns
+                    with the expected strengths for each role.<br><br>The gaps between the lines indicate where you have strengths
+                    or weaknesses relative to the typical 
+                    <span style="font-weight: 600;"><%- renderWithBoldJoin(associationData.map((item) => item.Name.slice(0,-1))) %></span> profile.
+                    <br><br>
+                    Areas where your profile closely matches or surpasses the benchmark suggest a natural aptitude for that attribute.
+                    Significant gaps may highlight areas for professional growth or indicate roles that may not align with your
+                    inherent strengths.
+                </p>
+                <div class="radar-chart-wrapper" style="break-before: always;">
+                    <div style="position: relative; bottom: -50px; font-weight: 600; text-align: center; break-after: avoid;">
+                        <%= userDetails.Name %> and Grinder
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="grindersChart"></canvas>
+                    </div>                    
+                    <div style="position: relative; bottom: -50px; font-weight: 600; text-align: center; break-after: avoid">
+                        <%= userDetails.Name %> and Minder
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mindersChart"></canvas>
+                    </div>
+                    <div style="position: relative; bottom: -50px; font-weight: 600; text-align: center; break-after: avoid;">
+                        <%= userDetails.Name %> and Finder
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="findersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="reportAddition-section" class="report-wrapper" style="max-width: 794px; width: 100%; margin: 0 auto; background-color: #fff; padding: 2vw 3vw; color: #333;">
+            <% reportAddition.forEach((trait, pidx) => { 
+                const styledDescription = trait.DetailedDescription.replace(
+                /<ul>/g,
+                '<ul style="padding-inline-start: 40px">'
+                );
+            %>
+                <div style="display: flex; flex-direction: row;">
+                    <div style="
+                        border-left: 4px solid;
+                        border-right: 4px solid;
+                        border-image: linear-gradient(90deg, #6684AC, #91D8F7, #C0CF52) 1;
+                        font-family: Montserrat, sans-serif;
+                        font-size: clamp(14px, 1.8vw, 16px);
+                        line-height: 1.5;
+                        <%= pidx === 0 ? 'border-top: 4px solid;' : '' %>
+                    ">
+                        <% if (pidx === 0) { %>
+                        <div style="
+                            display: flex;
+                            justify-content: space-around;
+                            padding: 8px 0;
+                            font-size: clamp(14px, 2vw, 18px);
+                            border-bottom: 4px solid;
+                            border-image: linear-gradient(90deg, #6684AC, #91D8F7, #C0CF52) 1;
+                            font-weight: 700;
+                            background: linear-gradient(90deg, #6684AC 0%, #91D8F7 50%, #C0CF52 100%);
+                            color: #fff;
+                        ">
+                            <div>LOW</div>
+                            <div>SCORE</div>
+                            <div>HIGH</div>
+                        </div>
+                        <% } %>
+
+                        <div style="background-color: #fff;">
+                            <div style="padding: 12px 10px;">
+                                <div style="font-size: clamp(14px, 2vw, 18px); font-weight: 600; margin-bottom: 8px;">
+                            <%= trait.Attribute %>
+                        </div>
+
+                        <div style="margin-bottom: 8px;"><%- styledDescription %></div>
+
+                        <div style="
+                            display: flex;
+                            flex-direction: row;
+                            width: 100%;
+                            justify-content: space-between;
+                            align-items: center;
+                            gap: 10px;
+                            margin: 0;
+                        ">
+                            <!-- Low Description -->
+                            <div style="flex-basis: 30%; align-self: flex-start; color: #6684AC;">
+                            <%= trait.LowDescription %>
+                            </div>
+
+                            <!-- Score Boxes -->
+                            <div style="
+                            flex-basis: 40%;
+                            display: flex;
+                            gap: 8px;
+                            justify-content: center;
+                            flex-wrap: wrap;
+                            ">
+                            <% for (let index = 0; index < 7; index++) {
+                                let backgroundColor = "#efefef";
+                                let color = "#000";
+                                const current = index + 1;
+                                if (current === trait.Score) {
+                                backgroundColor = "#DD5171";
+                                color = "#fff";
+                                } else if (current === trait.Score - 1 || current === trait.Score + 1) {
+                                backgroundColor = "#f2b7c5";
+                                color = "#fff";
+                                }
+                            %>
+                                <div style="
+                                width: 22px;
+                                height: 22px;
+                                background-color: <%= backgroundColor %>;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                color: <%= color %>;
+                                font-size: 12px;
+                                font-weight: bold;
+                                ">
+                                <%= current %>
+                                </div>
+                            <% } %>
+                            </div>
+
+                            <!-- High Description -->
+                            <div style="flex-basis: 30%; align-self: flex-start; color: #2CBA1C;">
+                            <%= trait.HighDescription %>
+                            </div>
+                        </div>   
+                            </div>                         
+                        <hr style="
+                            border: none;
+                            height: 4px;
+                            background-image: linear-gradient(90deg, #6684AC, #91D8F7, #C0CF52);
+                            margin: 0;
+                        " />                    
+                        </div>
+                    </div>
+                    <% ["Finder", "Minder", "Grinder"].forEach((item, i) => { 
+                        const hasType = trait.PersonalityTypes && trait.PersonalityTypes.includes(item);
+                    %>
+                        <div style="
+                            margin-left: 4px;
+                            width: 10px;
+                            background: <%= hasType ? personalityTypeColors[item] : '#fff' %>;
+                            color: #fff;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 700;
+                            writing-mode: vertical-rl;
+                            padding: 10px;
+                            font-size: 12px;
+                            margin-top: 0;
+                        ">
+                            <%= item.toUpperCase() %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% }) %>
+        </div>
+
+        <div id="improvementPage" class="report-wrapper" style="max-width: 794px; width: 100%; margin: 0px auto; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);">
+            <div class="improvement-wrapper" style="padding: 2vw 3vw; break-before: page;">
+                <div class="improvement-wrapper-icon"><img src="progress4Uri" alt="Improvement Icon" style="max-width: 100%;"></div>
+                <div class="improvement-wrapper-heading" style="font-size: clamp(20px, 3vw, 24px); line-height: 1.25; font-weight: 600; margin-top: 10px;">
+                    Part D: Opportunities for Development
+                </div>
+                <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 600; line-height: 1.5; margin-top: 20px;">
+                    Strengthening Your Performance by Playing to Your Strengths
+                </p>
+                <% behaviours.forEach(({ Title, Description, BehaviourGroups, Conclusion, BehaviourCount }, i) => { 
+                    const styledDescription = Description.replace(/<ul>/g, '<ul style="padding-inline-start: 40px">');
+                 %>
+                    <div>
+                        <p style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 300; line-height: 1.5; margin-top: 20px; page-break-before: avoid;">
+                            <p><%- getAttributeMessage(Title, i, behaviours.length,rankResult.highRank ) %></p>
+                        </p>
+
+                        <div class="weakness-wrapper" style="margin-top: 40px;">
+                            <div class="weakness-wrapper-heading" style="font-size: clamp(20px, 3vw, 24px); line-height: 1.25; font-weight: 600; margin-top: 10px;">
+                                <%= Title %>
+                            </div>
+
+                            <div style="font-size: clamp(14px, 1.8vw, 16px); font-weight: 400; line-height: 1.5; margin-top: 20px;" >
+                                <%- styledDescription %>
+                            </div>
+                        </div>
+                        <% if (BehaviourGroups.length) { %>
+                            <div class="question-wrapper" style="margin-top: 40px;">
+                                <p style="color: #254468; font-size: clamp(18px, 3vw, 24px); font-weight: 600; margin-bottom: 40px; line-height: 1.3;">
+                                    How to Strengthen Your <%= Title %> Skills - <%= BehaviourCount %> Fundamentals
+                                </p>
+
+                                <div class="answer-wrapper" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr)); gap: 30px;">
+                                <% BehaviourGroups.forEach((group, index) => {
+                                    const types = ['Success Behaviors', 'Unsuccessful Behaviors'];
+                                    const maxLength = Math.max(...types.map(type =>
+                                        group.BehaviourTitleGroup.filter(b => b.BehaviourType === type).length
+                                    ));
+                                    const behaviorMap = types.map(type =>
+                                        group.BehaviourTitleGroup.filter(b => b.BehaviourType === type)
+                                    );
+                                    const isBurred = index !== 0 && minimumScoreAttributes === null;
+                                %>
+                                    <div class="answer-card" style="page-break-inside: avoid; position: <%= isBurred ? 'relative' : 'unset' %>; filter: <%= isBurred ? 'blur(5px)' : 'none' %>; opacity: <%= isBurred ? 0.5 : 1 %>; pointer-events: <%= isBurred ? 'none' : 'auto' %>; user-select: <%= isBurred ? 'none' : 'auto' %>;">
+                                        <div style="display: flex; gap: 6px; font-weight: 600; font-size: clamp(16px, 2vw, 20px); page-break-inside: avoid; margin-bottom: 15px;">
+                                            <img src="listIconUri" width="10px" alt="List Icon" class="listIconUri" />
+                                            <div><%= group.Title %></div>
+                                        </div>
+                                        <% for (let i = 0; i < maxLength; i++) { %>
+                                            <div style="page-break-inside: avoid; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                                            <% behaviorMap.forEach((list, colIndex) => {
+                                                const item = list[i];
+                                                if (!item) { %><div></div><% return; } %>
+                                                <div style="padding: 1rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; background-color: <%= item.BehaviourType === 'Success Behaviors' ? '#e6f2ff' : '#003366' %>; color: <%= item.BehaviourType === 'Success Behaviors' ? '#000' : '#fff' %>;">
+                                                <div class="heading" style="font-size: 14px; font-weight: 600; margin-bottom: 15px;">
+                                                    <%= item.BehaviourType %>
+                                                </div>
+
+                                                <% if (item.Points && item.Points.length) { %>
+                                                    <ul style="padding-left: 20px;">
+                                                    <% item.Points.forEach((point, idx) => { %>
+                                                        <li style="margin-bottom: 3px; font-size: 12px;"><%= point %></li>
+                                                    <% }) %>
+                                                    </ul>
+                                                <% } %>
+
+                                                <% if (item.Examples && item.Examples.length) { %>
+                                                    <div class="heading" style="font-size: 14px; font-weight: 600; margin-bottom: 15px; margin-top: 15px;">Examples</div>
+                                                    <ul style="padding-left: 20px; font-style: italic; font-size: 12px;">
+                                                    <% item.Examples.forEach((example, idx) => { %>
+                                                        <li style="margin-bottom: 3px;"><%= example %></li>
+                                                    <% }) %>
+                                                    </ul>
+                                                <% } %>
+                                                </div>
+                                            <% }); %>                  
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                <% }); %>
+                                </div>
+                            </div>
+                        <% } %>
+                        <% if (Conclusion) { %>
+                            <div class="conclusion-wrapper" style="page-break-inside: avoid;">
+                                <div style="padding: 2vw 3vw; background-color: #1D3559; color: #ffffff; margin-top: 20px;">                                    
+                                    <div style="font-size: clamp(20px, 3vw, 24px); font-weight: 600; margin-bottom: 16px;">
+                                        Conclusion
+                                    </div>
+
+                                    <div style="font-size: clamp(12px, 1.6vw, 14px); line-height: 1.6; color: #ffffff;">
+                                        <%- styledConclusion(Conclusion) %>
+                                    </div>
+
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+
+        <% if (minimumScoreAttributes === null) { %>
+            <div id="unlockNow" className="report-wrapper" style="max-width: 794px; width: 100%; margin: 0px auto; background-color: #fff; color: #333" >
+                <div class="conclusion-wrapper unlock-now-container" style="page-break-inside: avoid;">
+                    <div style="padding: 2vw 3vw; page-break-after: always; background-color: #1D3559;">                
+                        <!-- Unlock message -->
+                        <div style="margin-bottom: 10px; line-height: 1.6; font-size: clamp(14px, 1.8vw, 16px); color: #fff;">
+                            Want to learn more? Click here to access your detailed report.
+                        </div>
+
+                        <div style="margin-bottom: 10px; line-height: 1.6; font-size: clamp(14px, 1.8vw, 16px); color: #fff;">
+                            GET ACCESS NOW
+                        </div>
+
+                        <div style="margin-bottom: 10px; line-height: 1.6; font-size: clamp(14px, 1.8vw, 16px); color: #fff;">
+                            Your detailed report will
+                        </div>
+
+                        <!-- List of features -->
+                        <ul style="padding-inline-start: 40px; margin-bottom: 1rem; color: #fff; font-size: clamp(14px, 1.8vw, 16px);">
+                            <li style="margin-bottom: 10px;">
+                                Provide specific guidance on how you can play to your strengths in your work environment.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Include (up to 12) descriptions of successful (and unsuccessful) behaviors to show you what works.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Refer to specific workplace examples so you can apply what you learn.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Give you a baseline to work from so you can track the progress if your developmental journey.
+                            </li>
+                        </ul>
+
+                        <!-- Final call-to-action -->
+                        <div style="color: #fff; margin-bottom: 20px; line-height: 1.6; font-size: clamp(14px, 1.8vw, 16px);">
+                            Access the report to give yourself the best chance of building a rewarding career in an organization that thrives.
+                        </div>
+
+                        <!-- CTA Button -->
+                        <a
+                            href="/Register"
+                            style="
+                                width: 230px;
+                                height: 55px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                gap: 20px;
+                                font-size: 14px;
+                                color: #fff;
+                                background-color: #67BEE1;
+                                border: none;
+                                cursor: pointer;
+                                text-decoration: none;
+                                font-weight: bold;
+                                padding: 12px 20px;
+                            "
+                        >
+                            GET ACCESS NOW
+                            <img src="reportRightIconUri" alt="Arrow icon" class="reportRightIconUri" />
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+        <div id="appendixB-section" class="report-wrapper" style="max-width: 794px; width: 100%; margin: 0px auto; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);">
+            <div class="appendixB-wrapper" style="padding: 2vw 3vw; break-before: page; line-height: 1.5; font-size: clamp(14px, 1.8vw, 16px);">
+                <div style="font-size: clamp(20px, 3vw, 24px); line-height: 1.25; font-weight: 600; margin-bottom: 10px;">Appendix
+                    A: Background of PanPersona
+                </div>
+                <p style="margin-bottom: 10px;">
+                    The "Finders, Minders, and Grinders" framework is a well-established model in
+                    professional services, particularly in accounting, law, and consulting. It categorizes roles within a firm to
+                    align individuals' strengths with their responsibilities, enhancing efficiency and effectiveness.
+                </p>
+                <div style="font-size: clamp(14px, 2vw, 18px); line-height: 1.25; font-weight: 600; margin-bottom: 10px;">
+                    Origin and Evolution
+                </div>
+                <p style="margin-bottom: 10px;">The concept was popularized by David Maister in his 1993 book <em>Managing the
+                    Professional Service Firm</em>. Maister, a former Harvard Business School professor, identified three primary
+                    roles:
+                </p>
+                <ul style="padding-inline-start: 40px; margin-bottom: 1rem;">
+                    <li style="margin-bottom: 5px;">Finders: Individuals who generate new business and build client relationships.
+                    </li>
+                    <li style="margin-bottom: 5px;">Minders: Professionals who manage client relationships and oversee the execution
+                    of work.</li>
+                    <li style="margin-bottom: 5px;">Grinders: Staff who perform the technical work and deliver services to clients.
+                    </li>
+                </ul>
+                <p style="margin-bottom: 10px;">
+                    This model provided a clear structure for professional firms to organize their teams effectively.
+                </p>
+                <p style="margin-bottom: 10px;">
+                    While Maister's terminology became widely adopted, a similar concept was
+                    introduced earlier by Michael Gerber in his 1986 book <em>The E-Myth Revisited</em>, in which he described three
+                    roles:
+                </p>
+                <ul style="padding-inline-start: 40px; margin-bottom: 1rem;">
+                    <li style="margin-bottom: 5px;">Entrepreneur: The visionary who drives the business forward.</li>
+                    <li style="margin-bottom: 5px;">Manager: The organizer who creates systems and processes.</li>
+                    <li style="margin-bottom: 5px;">Technician: The doer who performs the technical work.</li>
+                </ul>
+                <p style="margin-bottom: 10px;">
+                    Although Gerber's model targeted small business owners, the underlying principle
+                    of aligning roles with individual strengths parallels Maister's framework.
+                </p>
+                <p style="margin-bottom: 10px;">
+                    Over time, the "Finders, Minders, and Grinders" model has been adapted to
+                    professional settings including Accounting businesses, Law Firms (which sometimes includes "Binders," who focus
+                    on internal cohesion and culture), Financial Planners and Startups (where founders often juggle all three roles
+                    initially but eventually delegate to specialists as the business grows).
+                </p>
+                <p>
+                    This simple and effective model is further defined in PanPersona by identifying attributes associated with each
+                    type to enable clearer analysis, team building, and professional growth.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            const inputData = <%- JSON.stringify(associationData) %>;
+
+            const maxValue = Math.max(...inputData.map(item => item.Value));
+            const minValue = Math.min(...inputData.map(item => item.Value));
+
+            const startTick = Math.max(0, Math.floor(minValue) - 2);
+            const endTick = Math.min(100, Math.ceil(maxValue) + 2);
+
+            // Generate ticks with gap of 2
+            const xTicks = [];
+            for (let tick = startTick; tick <= endTick; tick += 2) {
+                xTicks.push(tick);
+            }
+
+            const barLabels = inputData.map(item => item.Name.slice(0, -1));
+            const values = inputData.map(item => item.Value);
+            const backgroundColors = ['#6684AC', '#94829C', '#91D8F7'];
+
+            const chartData = <%- JSON.stringify(chartData) %>;
+            const charts = <%- chartsJSON %>;
+            const labels = chartData.map(item => item.AttributeName);
+           
+            const barCtx = document.getElementById('associationBarChart')?.getContext('2d');
+
+            if (barCtx) {
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                    labels: barLabels,
+                    datasets: [{
+                        label: '% Association',
+                        data: values,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1,
+                        barThickness: 35,
+                        maxBarThickness: 35,
+                        categoryPercentage: 0.5,
+                        barPercentage: 0.5
+                    }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        layout: {
+                            padding: {
+                                left: 0
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                bounds: 'ticks',
+                                beginAtZero: true,
+                                min: startTick,
+                                max: endTick,
+                                ticks: {
+                                    stepSize: 2,
+                                },
+                                title: {
+                                        display: true,
+                                        text: '% Association'
+                                    }
+                                },
+                            y: {
+                                offset: true,
+                                ticks: {
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }            
+
+            function buildRadarDataset(config) {
+                return config.map(entry => ({
+                    label: ["Finders", "Minders", "Grinders"].includes(entry.Name) ? entry.Name.slice(0,-1) : entry.Name,
+                    data: chartData.map(attr => attr[entry.DataKey]),
+                    borderColor: entry.Color,
+                    pointBackgroundColor: entry.Color,
+                    borderWidth: 2,
+                    backgroundColor: "transparent"
+                }));
+            }
+
+            function renderRadarChart(canvasId, configKey) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                const data = {
+                    labels: labels,
+                    datasets: buildRadarDataset(charts[configKey])
+                };
+
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: data,
+                    options: {
+                    responsive: true,
+                    elements: {
+                        line: {
+                        tension: 0.1
+                        }
+                    },
+                    scales: {
+                        r: {
+                            grid: {
+                                circular: true,
+                                color: '#aaa',
+                                lineWidth: 1.5       // Make them thicker
+                            },
+                            angleLines: {
+                                color: '#aaa',       // Darker lines from center to edge
+                                lineWidth: 1.5
+                            },
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 2,
+                                backdropColor: 'transparent'
+                            },
+                            min: 0,
+                            max: 8,
+                            ticks: { stepSize: 2, display: false},
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                boxHeight: 12,
+                                usePointStyle: false
+                            }
+                        }
+                    }
+                    }
+                });
+            }
+
+            // Utility to convert hex to rgba
+            function hexToRgba(hex, alpha) {
+                const bigint = parseInt(hex.replace("#", ""), 16);
+                const r = (bigint >> 16) & 255;
+                const g = (bigint >> 8) & 255;
+                const b = bigint & 255;
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            }
+
+            // Render charts
+            renderRadarChart("grindersChart", "Grinders");
+            renderRadarChart("mindersChart", "Minders");
+            renderRadarChart("findersChart", "Finders");
+        });
+    </script>
+</body>
+
+</html>
