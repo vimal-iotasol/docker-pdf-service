@@ -179,7 +179,7 @@
                         </ul>
                     </div>
                     <div class="barChart" style="width: 100%; overflow-x: auto; margin: 20px 0px;">
-                        <canvas id="associationBarChart" width="600" height="300"></canvas>
+                        <canvas id="associationBarChart" width="600" height="280"></canvas>
                     </div>     
 
                     <div style="margin-top: 20px; line-height: 1.5; font-size: clamp(14px, 1.8vw, 16px);">
@@ -508,27 +508,30 @@
 
                         <!-- CTA Button -->
                         <a
-                            href="/Register"
+                            href="<%= ProjectUrl %>"
+                            target="_blank"
                             style="
+                                display: inline-block;
                                 width: 230px;
                                 height: 55px;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                gap: 20px;
-                                font-size: 14px;
-                                color: #fff;
                                 background-color: #67BEE1;
-                                border: none;
-                                cursor: pointer;
-                                text-decoration: none;
+                                color: #fff;
                                 font-weight: bold;
-                                padding: 12px 20px;
+                                font-size: 14px;
+                                text-decoration: none;
+                                text-align: center;
+                                line-height: 55px;
+                                padding: 0 20px;
+                                cursor: pointer;
                             "
-                        >
+                            >
                             GET ACCESS NOW
-                            <img src="reportRightIconUri" alt="Arrow icon" class="reportRightIconUri" />
-                        </a>
+                            <img
+                                src="reportRightIconUri"
+                                alt="Arrow icon"
+                                style="vertical-align: middle; margin-left: 10px; height: 16px;"
+                            />
+                            </a>
 
                     </div>
                 </div>
@@ -611,13 +614,45 @@
 
             const barLabels = inputData.map(item => item.Name.slice(0, -1));
             const values = inputData.map(item => item.Value);
-            const backgroundColors = ['#6684AC', '#94829C', '#91D8F7'];
-
-            const chartData = <%- JSON.stringify(chartData) %>;
-            const charts = <%- chartsJSON %>;
-            const labels = chartData.map(item => item.AttributeName);
+            const backgroundColors = ['#6684AC', '#94829C', '#91D8F7'];           
            
             const barCtx = document.getElementById('associationBarChart')?.getContext('2d');
+
+            const slashPlugin = {
+                id: 'slashIntersectionPlugin',
+                afterDraw(chart) {
+                    const {ctx, chartArea, scales} = chart;
+                    const xScale = scales.x;
+                    const yScale = scales.y;
+
+                    // Get pixel positions of the bottom-left (intersection point)
+                    const xPixel = xScale.getPixelForValue(xScale.min) - 10;
+                    const yPixel = chartArea.bottom + 5;
+
+                    ctx.save();
+
+                    ctx.fillStyle = '#fff'; // White background
+                    ctx.fillRect(xPixel - 4, yPixel - 12, 24, 16); 
+
+                    ctx.strokeStyle = '#666';
+                    ctx.lineWidth = 2;
+
+                    const slashHeight = 10;
+                    const slashSpacing = 8;
+
+                    // Draw two small diagonal slashes to simulate axis break
+                    for (let i = 0; i < 2; i++) {
+                        const offset = i * slashSpacing;
+                        ctx.beginPath();
+                        ctx.moveTo(xPixel + offset + 10, yPixel - slashHeight);  // start top-right
+                        ctx.lineTo(xPixel + offset, yPixel); 
+                        ctx.stroke();
+                    }
+
+                    ctx.restore();
+                }
+            };
+
 
             if (barCtx) {
                 new Chart(barCtx, {
@@ -672,9 +707,14 @@
                                 display: false
                             }
                         }
-                    }
+                    },
+                    plugins: [slashPlugin]
                 });
             }            
+            
+            const chartData = <%- JSON.stringify(chartData) %>;
+            const charts = <%- chartsJSON %>;
+            const labels = chartData.map(item => item.AttributeName);
 
             function buildRadarDataset(config) {
                 return config.map(entry => ({

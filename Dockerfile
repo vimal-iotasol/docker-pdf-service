@@ -47,15 +47,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssh-server 
 
 # Create app directory
 WORKDIR /app
-COPY assets ./assets
-COPY logs ./logs
-
-# Copy package files first for better caching
-COPY package*.json ./
-RUN npm install
 
 # Copy application files
-COPY . .
+COPY assets ./assets
+COPY templates ./templates
+COPY package*.json ./
+COPY utils ./utils
+COPY index.js ./index.js
+COPY logger.js ./logger.js
+COPY Dockerfile ./Dockerfile
+COPY logs ./logs
+
+# Install app dependencies
+RUN npm update && npm install
 
 # Set ENV variables
 ENV CHROME_BIN=/usr/bin/google-chrome-stable

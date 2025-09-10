@@ -60,4 +60,32 @@ function capitalizeChartsDataKeys(charts) {
 }
 
 
-module.exports = { createRank,PERSONALITY_TYPE_INFO,personalityTypeColors,capitalizeChartsDataKeys };
+
+// ───── Load images as data URIs ─────
+const ImageMap = (upload) => {
+  return {
+    footerImg: { path: "/app/assets/footerImg.svg", type: "svg+xml" },
+    logo: { path: "/app/assets/logo.png", type: "png" },
+    progress1: { path: "/app/assets/progress1.svg", type: "svg+xml" },
+    progress2: { path: "/app/assets/progress2.svg", type: "svg+xml" },
+    progress3: { path: "/app/assets/progress3.svg", type: "svg+xml" },
+    progress4: { path: "/app/assets/progress4.svg", type: "svg+xml" },
+    reportBg: { path: "/app/assets/report-bg.svg", type: "svg+xml" },
+    reportLockIcon: { path: "/app/assets/reportLockIcon.svg", type: "svg+xml" },
+    reportRightIcon: { path: "/app/assets/reportRightIcon.svg", type: "svg+xml" },
+    listIcon: { path: "/app/assets/listIcon.svg", type: "svg+xml" },
+    panPersona: {
+      path: `/app/assets/${upload ? "panPersona" : "clientClassification"}.svg`,
+      type: "svg+xml",
+    },
+  };
+};
+
+
+module.exports = {
+  createRank,
+  PERSONALITY_TYPE_INFO,
+  personalityTypeColors,
+  capitalizeChartsDataKeys,
+  ImageMap,
+};
