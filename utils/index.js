@@ -81,6 +81,11 @@ const ImageMap = (upload) => {
   };
 };
 
+function pdfTimeoutExpires(ms) {
+  return new Promise((_, reject) => {
+    setTimeout(() => reject(new Error("PDF generation timed out")), ms);
+  });
+}
 
 module.exports = {
   createRank,
@@ -88,4 +93,5 @@ module.exports = {
   personalityTypeColors,
   capitalizeChartsDataKeys,
   ImageMap,
+  pdfTimeoutExpires
 };

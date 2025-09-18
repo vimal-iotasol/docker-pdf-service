@@ -120,7 +120,7 @@
                             <% if (userDetails.JobTitle) { %>
                                 <div class="user-job"
                                     style="font-size: clamp(14px, 2vw, 18px); line-height: 1.2; margin-bottom: 8px;">
-                                    <span style="font-weight: 600;"> Current Job Title</span> : <%= userDetails.JobTitle %>
+                                    <span style="font-weight: 600;">Current Job Title</span> : <%= userDetails.JobTitle %>
                                 </div>
                             <% } %>
                             <% if (userDetails.Age) { %>
@@ -130,7 +130,7 @@
                             <% } %>
                             <% if (userDetails.Location) { %>
                                 <div class="user-job" style="font-size: clamp(14px, 2vw, 18px); line-height: 1.2; margin-bottom: 8px;">
-                                    <span style="font-weight: 600;">Current Job Title</span> : <%= userDetails.Location %>
+                                    <span style="font-weight: 600;">Location(City)</span> : <%= userDetails.Location %>
                                 </div>
                             <% } %>
                         </div>
@@ -213,19 +213,19 @@
                     inherent strengths.
                 </p>
                 <div class="radar-chart-wrapper" style="break-before: always;">
-                    <div style="position: relative; bottom: -50px; font-weight: 600; text-align: center; break-after: avoid;">
+                    <div style="position: relative; bottom: -30px; font-weight: 600; text-align: center; break-after: avoid;">
                         <%= userDetails.Name %> and Grinder
                     </div>
                     <div class="chart-container">
                         <canvas id="grindersChart"></canvas>
                     </div>                    
-                    <div style="position: relative; bottom: -50px; font-weight: 600; text-align: center; break-after: avoid">
+                    <div style="position: relative; bottom: -30px; font-weight: 600; text-align: center; break-after: avoid">
                         <%= userDetails.Name %> and Minder
                     </div>
                     <div class="chart-container">
                         <canvas id="mindersChart"></canvas>
                     </div>
-                    <div style="position: relative; bottom: -50px; font-weight: 600; text-align: center; break-after: avoid;">
+                    <div style="position: relative; bottom: -30px; font-weight: 600; text-align: center; break-after: avoid;">
                         <%= userDetails.Name %> and Finder
                     </div>
                     <div class="chart-container">
